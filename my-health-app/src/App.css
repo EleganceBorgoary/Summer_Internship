@@ -1,0 +1,1637 @@
+/* ============================================= */
+/*          1. GLOBAL & ROOT VARIABLES           */
+/* ============================================= */
+:root {
+  --primary-color: #2563eb; /* Blue */
+  --primary-hover: #1d4ed8;
+  --secondary-color: #e5e7eb; /* Light Gray for buttons */
+  --secondary-hover: #d1d5db;
+  --bg-light: #f9fafb; /* Very light gray page background */
+  --bg-white: #ffffff;
+  --bg-dark: #111827;  /* For dark sections like CTA */
+  --text-dark: #1f2937;
+  --text-light: #6b7280;
+  --text-white: #f9fafb;
+  --border-color: #e5e7eb;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-white);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+/* For smooth scrolling when clicking nav links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ============================================= */
+/*          2. UTILITY & HELPER CLASSES          */
+/* ============================================= */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  padding: 5rem 0;
+}
+
+.section-light {
+  background-color: var(--bg-light);
+}
+
+.section-dark {
+  background-color: var(--bg-dark);
+  color: var(--text-white);
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-size: 1.125rem;
+  color: var(--text-light);
+  max-width: 600px;
+  margin: 0 auto 3rem auto;
+}
+
+.section-dark .section-subtitle {
+  color: var(--secondary-color);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--bg-white);
+}
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: var(--bg-white);
+  color: var(--text-dark);
+  border-color: var(--border-color);
+}
+.btn-secondary:hover {
+  background-color: var(--bg-light);
+  transform: translateY(-2px);
+}
+
+.btn-light {
+  background-color: var(--bg-white);
+  color: var(--text-dark);
+}
+.btn-light:hover {
+  background-color: var(--secondary-hover);
+  color: var(--text-dark);
+}
+
+
+/* ============================================= */
+/*              3. NAVBAR COMPONENT              */
+/* ============================================= */
+
+.navbar {
+  background-color: var(--bg-white);
+  box-shadow: var(--shadow);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  height: 80px; /* Give the navbar a fixed height */
+  display: flex;
+  align-items: center;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.nav-logo {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style-type: none; /* Remove bullet points if we use <li> */
+}
+
+.nav-links a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid transparent; /* For hover effect */
+}
+
+.nav-links a:hover,
+.nav-links a.active { /* Style for active link */
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+.nav-actions {
+  display: flex;
+  gap: 1rem;
+  margin-left: 2rem; /* Add some space between links and buttons */
+}
+
+/* Hamburger Menu Icon */
+.nav-toggle {
+  display: none; /* Hidden on desktop */
+  font-size: 1.8rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--text-dark);
+}
+
+/* ============================================= */
+/*            NAVBAR - MOBILE STYLES             */
+/* ============================================= */
+@media (max-width: 960px) {
+  .nav-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 2.5rem;
+    position: absolute;
+    top: 80px; /* Position it right below the navbar */
+    left: -100%; /* Start off-screen */
+    width: 100%;
+    height: calc(100vh - 80px); /* Full height minus navbar */
+    background-color: var(--bg-white);
+    transition: all 0.3s ease-in-out;
+    padding-top: 3rem;
+  }
+
+  .nav-menu.active {
+    left: 0; /* Slide it into view */
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+  
+  .nav-links a {
+    font-size: 1.2rem;
+  }
+
+  .nav-actions {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-left: 0;
+  }
+
+  .nav-actions .btn {
+    width: 200px;
+    text-align: center;
+  }
+
+  .nav-toggle {
+    display: block; /* Show hamburger icon on mobile */
+    z-index: 1001; /* Make sure it's on top */
+  }
+}
+
+/* ============================================= */
+/*             4. HERO SECTION                   */
+/* ============================================= */
+
+/* The main container for the hero section */
+.hero-section {
+  position: relative; /* This is crucial for positioning child elements */
+  height: 90vh; /* Make the section take up 90% of the viewport height */
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; /* All text inside will be white by default */
+  text-align: center;
+}
+
+/* This class applies the background image */
+.hero-bg {
+  /* Make sure you have your image at 'src/assets/hero-image.jpg' */
+  /* The path must be relative from the CSS file's location */
+  background-image: url('./assets/hero-image.jpg');
+  background-size: cover; /* Cover the entire area */
+  background-position: center center; /* Center the image */
+  background-repeat: no-repeat;
+}
+
+/* This creates the dark overlay for text readability */
+.hero-overlay {
+  position: absolute; /* Position it relative to .hero-section */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Black with 50% opacity */
+  z-index: 1; /* Place it above the background but below the content */
+}
+
+/* This positions the text content on top of everything */
+.hero-content {
+  position: relative; /* Position it relative to its normal flow */
+  z-index: 2; /* Ensure it's on top of the overlay */
+  max-width: 800px; /* Limit the width of the text for readability */
+}
+
+.hero-title {
+  font-size: 3.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0 auto 1.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add a shadow to the text */
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  max-width: 650px;
+  margin: 0 auto 2.5rem;
+  opacity: 0.9;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* We need to make the secondary button look good on a dark background */
+.hero-section .btn-secondary {
+  background-color: transparent;
+  color: white;
+  border-color: white;
+}
+.hero-section .btn-secondary:hover {
+  background-color: white;
+  color: var(--text-dark);
+}
+
+/* ============================================= */
+/*              5. FEATURES LIST                 */
+/* ============================================= */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.feature-card {
+  background-color: var(--bg-white);
+  padding: 2.5rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+.icon-blue { color: #3b82f6; }
+.icon-green { color: #22c55e; }
+.icon-yellow { color: #f59e0b; }
+.icon-red { color: #ef4444; }
+
+
+.feature-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.feature-description {
+  color: var(--text-light);
+}
+
+
+/* ============================================= */
+/*              6. SERVICES SECTION              */
+/* ============================================= */
+.services-list-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.service-list {
+  list-style-type: none;
+}
+
+.service-list li {
+  background-color: var(--bg-white);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  border-left: 5px solid var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.service-list li strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--text-dark);
+}
+
+.service-list li span {
+  color: var(--text-light);
+}
+
+
+/* ============================================= */
+/*            7. HOW IT WORKS SECTION            */
+/* ============================================= */
+.steps-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  position: relative;
+  margin-top: 4rem;
+}
+
+.step-card {
+  position: relative;
+  padding: 2rem;
+}
+
+.step-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: var(--bg-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+.step-icon {
+  font-size: 2rem;
+}
+
+.step-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.step-description {
+  color: var(--text-light);
+}
+
+/* Dashed line connecting steps */
+.steps-container::before {
+  content: '';
+  position: absolute;
+  top: 40px; /* Vertically align with the center of icons */
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  background-image: linear-gradient(to right, var(--border-color) 50%, transparent 50%);
+  background-size: 20px 2px;
+  z-index: -1;
+}
+
+
+/* ============================================= */
+/*             8. TESTIMONIAL SECTION            */
+/* ============================================= */
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.testimonial-card {
+  background-color: var(--bg-white);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-quote {
+  font-style: italic;
+  color: var(--text-light);
+  flex-grow: 1; /* Pushes author to the bottom */
+  margin-bottom: 1.5rem;
+}
+.testimonial-quote::before {
+  content: '"';
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-right: 0.25rem;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+}
+
+.testimonial-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.testimonial-name {
+  font-weight: 600;
+}
+
+.testimonial-role {
+  font-size: 0.9rem;
+  color: var(--text-light);
+}
+
+
+/* ============================================= */
+/*              9. CTA SECTION                   */
+/* ============================================= */
+.cta-section {
+  background: linear-gradient(45deg, var(--primary-color), #3b82f6);
+  color: var(--text-white);
+}
+
+.cta-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.cta-text {
+  font-size: 1.125rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+
+/* ============================================= */
+/*            10. EARLY ACCESS SECTION           */
+/* ============================================= */
+.early-access-form {
+  display: flex;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.early-access-form input {
+  flex-grow: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px 0 0 8px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.early-access-form button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background-color: var(--primary-color);
+  color: var(--bg-white);
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.early-access-form button:hover {
+  background-color: var(--primary-hover);
+}
+.early-access-form button:disabled {
+  background-color: var(--text-light);
+  cursor: not-allowed;
+}
+
+.form-success-message {
+  margin-top: 1rem;
+  color: #22c55e;
+}
+.form-error-message {
+  margin-top: 1rem;
+  color: #ef4444;
+}
+
+/* ============================================= */
+/*               11. TEAM SECTION                */
+/* ============================================= */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.team-card {
+  text-align: center;
+}
+
+.team-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-lg);
+  object-fit: cover;
+}
+
+.team-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.team-role {
+  color: var(--primary-color);
+}
+
+
+/* ============================================= */
+/*               12. FAQ SECTION                 */
+/* ============================================= */
+.faq-container {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.faq-question {
+  width: 100%;
+  padding: 1.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.faq-icon {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--primary-color);
+}
+
+.faq-answer {
+  padding: 0 0 1.5rem 0;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+/* ============================================= */
+/*              13. FOOTER SECTION               */
+/* ============================================= */
+.footer {
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  padding: 2rem 0;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* Allows items to stack on small screens */
+  gap: 1rem; /* Adds space between items when they wrap */
+}
+
+.footer-copyright {
+  font-size: 0.9rem;
+}
+
+.footer-simple-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer-simple-links a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.footer-simple-links a:hover {
+  color: var(--primary-color);
+}
+
+
+/* ============================================= */
+/*              14. RESPONSIVE MEDIA QUERIES     */
+/* ============================================= */
+@media (max-width: 768px) {
+  /* ... keep your existing responsive styles here ... */
+
+  /* Make the footer content stack vertically on small screens */
+  .footer-content {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+  
+/* ============================================= */
+/*           15. AUTHENTICATION PAGES            */
+/* ============================================= */
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--bg-light);
+  padding: 2rem;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 500px;
+  background-color: var(--bg-white);
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-title {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 2rem;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 0.85rem;
+  font-size: 1.1rem;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: var(--text-light);
+}
+.auth-footer a {
+  color: var(--primary-color);
+  font-weight: 500;
+  text-decoration: none;
+}
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+.auth-footer p {
+  margin-bottom: 0.5rem;
+}
+
+/* Role Selection Specific Styles */
+.role-selection-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.role-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-dark);
+  transition: all 0.3s ease;
+}
+.role-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+  border-color: var(--primary-color);
+}
+.role-icon {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+.patient-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.back-to-home {
+  text-align: center;
+  margin-top: 2rem;
+}
+.back-to-home a {
+  color: var(--text-light);
+}
+
+/* Doctor Form Grid */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* ============================================= */
+/*           16. DOCTOR LISTING & PROFILE        */
+/* ============================================= */
+
+.page-header {
+  background-color: var(--bg-light);
+  padding: 120px 0 40px 0; /* Add padding for navbar */
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.doctor-list-container {
+  padding: 3rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.doctor-card {
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+}
+.doctor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary-color);
+}
+
+.doctor-card h3 {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+.doctor-card .specialization {
+  font-weight: 500;
+  color: var(--text-dark);
+  margin: 0.25rem 0 1rem 0;
+}
+.doctor-card .address {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+/* Doctor Profile Page */
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 120px 1.5rem 4rem 1.5rem;
+}
+.profile-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 2rem;
+}
+.profile-name {
+  font-size: 2.5rem;
+}
+.verified-badge {
+  display: inline-block;
+  background-color: #22c55e;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: 1rem;
+}
+.profile-details {
+  background-color: var(--bg-light);
+  padding: 2rem;
+  border-radius: 8px;
+}
+.profile-details p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: var(--text-light);
+}
+.profile-details strong {
+  color: var(--text-dark);
+  min-width: 150px;
+  display: inline-block;
+}
+
+/* ============================================= */
+/*           17. ADMIN PANEL STYLES              */
+/* ============================================= */
+.admin-login-prompt {
+  max-width: 400px;
+  margin: 4rem auto;
+}
+.admin-table-container {
+  width: 100%;
+  overflow-x: auto; /* For responsiveness */
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+.admin-table th, .admin-table td {
+  border: 1px solid var(--border-color);
+  padding: 0.75rem;
+  text-align: left;
+}
+.admin-table th {
+  background-color: var(--bg-light);
+}
+.admin-table tr:nth-child(even) {
+  background-color: var(--bg-light);
+}
+.status-pending {
+  color: #f59e0b;
+  font-weight: bold;
+}
+.status-verified {
+  color: #22c55e;
+  font-weight: bold;
+}
+.status-rejected {
+  color: #ef4444;
+  font-weight: bold;
+}
+.admin-actions button {
+  padding: 0.4rem 0.8rem;
+  margin-right: 0.5rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+.approve-btn {
+  background-color: #22c55e;
+  color: white;
+}
+.reject-btn {
+  background-color: #ef4444;
+  color: white;
+}
+
+/* Navbar CTA Link */
+.nav-link-cta {
+  background-color: var(--primary-color);
+  color: white !important;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+}
+.nav-link-cta:hover {
+  background-color: var(--primary-hover);
+}
+
+/* ============================================= */
+/*           18. SEARCH & FILTER BAR             */
+/* ============================================= */
+
+.search-filter-bar {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  background-color: var(--bg-white);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+.search-input {
+  flex-grow: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+.filter-select {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  min-width: 200px;
+}
+
+/* ============================================= */
+/*           19. DOCTOR DASHBOARD                */
+/* ============================================= */
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+.dashboard-header h2 {
+  font-weight: 500;
+  color: var(--text-light);
+}
+
+.profile-status {
+  background-color: var(--bg-light);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.profile-details-view p {
+  font-size: 1.1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.profile-details-view p:last-child {
+  border-bottom: none;
+}
+.profile-details-view strong {
+  color: var(--text-dark);
+  min-width: 150px;
+  display: inline-block;
+}
+
+.dashboard-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+/* ============================================= */
+/*           20. APPOINTMENT SCHEDULING          */
+/* ============================================= */
+
+.appointment-scheduler h4 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.slot-btn {
+  padding: 0.75rem;
+  border: 1px solid var(--primary-color);
+  background-color: transparent;
+  color: var(--primary-color);
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.slot-btn:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* ============================================= */
+/*           21. AVAILABILITY & TABS             */
+/* ============================================= */
+
+.dashboard-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 2rem;
+}
+.dashboard-tabs button {
+  padding: 1rem 1.5rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-light);
+  border-bottom: 3px solid transparent;
+}
+.dashboard-tabs button.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+.availability-manager h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.availability-day {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--border-color);
+}
+.availability-day.active {
+  background-color: #e0f2fe; /* Light blue */
+}
+.day-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.day-toggle input {
+  width: 20px;
+  height: 20px;
+}
+.time-selects {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.time-selects select {
+  padding: 0.5rem;
+}
+
+.appointment-list {
+  margin-top: 1rem;
+}
+.appointment-item {
+  background-color: var(--bg-light);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+.appointment-item p {
+  margin: 0;
+}
+@media screen and (max-width: 768px) {
+  .admin-table thead {
+    display: none;
+  }
+
+  .admin-table, .admin-table tbody, .admin-table tr, .admin-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 1rem;
+  }
+
+  .admin-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+
+  .admin-actions {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .approve-btn,
+  .reject-btn {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+}
+@media screen and (min-width: 768px) {
+  .hero {
+    padding: 4rem 3rem;
+    text-align: left;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+  }
+
+  .hero p {
+    font-size: 1.25rem;
+  }
+}
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .auth-container {
+    padding: 1rem;
+  }
+
+  .appointment-item p {
+    font-size: 0.95rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .btn-secondary {
+    width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .dashboard-tabs {
+    flex-direction: column;
+  }
+
+  .btn-secondary,
+  .btn-primary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .dashboard-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .appointment-item p {
+    font-size: 0.95rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+  }
+}
+@media screen and (max-width: 768px) {
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .section-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .doctor-card {
+    padding: 1rem;
+  }
+
+  .doctor-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .doctor-card .address {
+    font-size: 0.85rem;
+  }
+}
+@media screen and (max-width: 480px) {
+  .auth-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .auth-title {
+    font-size: 1.5rem;
+  }
+
+  .btn-primary {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 600px) {
+  .profile-name {
+    font-size: 1.5rem;
+  }
+
+  .verified-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .profile-details-view,
+  .appointment-scheduler {
+    padding: 1rem;
+  }
+}
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-title {
+    font-size: 1.5rem;
+  }
+
+  .auth-subtitle {
+    font-size: 0.95rem;
+  }
+}
+@media (max-width: 400px) {
+  .auth-title {
+    font-size: 1.5rem;
+  }
+}
+@media (max-width: 400px) {
+  .auth-title {
+    font-size: 1.5rem;
+  }
+}
+@media (max-width: 600px) {
+  .auth-container {
+    padding: 1rem;
+  }
+
+  .auth-title {
+    font-size: 1.5rem;
+  }
+
+  .role-selection-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+/* ============================================= */
+/*           22. WEEKLY AVAILABILITY SUMMARY     */
+/* ============================================= */
+
+.weekly-availability-summary {
+  margin-top: 2.5rem;
+  padding: 2rem;
+  background-color: var(--bg-light);
+  border-radius: 8px;
+}
+
+.weekly-availability-summary h4 {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  color: var(--text-dark);
+  text-align: center;
+}
+
+.availability-list {
+  list-style-type: none;
+  padding: 0;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.availability-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.availability-list li:last-child {
+  border-bottom: none;
+}
+
+.availability-list .day-name {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.availability-list .day-time {
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+/* ============================================= */
+/*              23. PROFILE PICTURES             */
+/* ============================================= */
+
+.profile-pic-uploader {
+  position: relative;
+}
+
+.profile-pic-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  border: 4px solid var(--bg-white);
+  box-shadow: var(--shadow);
+}
+
+.profile-pic-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+  border: none;
+  font-size: 0.9rem;
+}
+.profile-pic-container:hover .upload-overlay {
+  opacity: 1;
+}
+.upload-overlay svg {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Dashboard Header with Pic */
+.dashboard-header-with-pic {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+.dashboard-header-text {
+  flex-grow: 1;
+}
+.logout-btn {
+  align-self: flex-start; /* Aligns logout button to the top */
+}
+
+/* Public Doctor List Card */
+.doctor-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.doctor-card-pic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.doctor-card h3 { margin: 0; }
+.doctor-card .specialization { margin: 0; }
+
+/* Public Doctor Profile Page */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.profile-page-pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: var(--shadow-lg);
+}
+/* ============================================= */
+/*           24. DASHBOARD ENHANCEMENTS          */
+/* ============================================= */
+
+.appointments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.appointments-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.appointments-header .btn {
+  padding: 0.5rem 1rem;
+}
+/* ============================================= */
+/*           25. REVIEW & FEEDBACK SYSTEM        */
+/* ============================================= */
+
+/* Review Form Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+.modal-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--text-light);
+}
+.modal-subtitle {
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
+}
+
+/* Star Rating */
+.star-rating {
+  display: flex;
+  gap: 0.25rem;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+.star-rating input[type="radio"] {
+  display: none;
+}
+.star-rating .star {
+  cursor: pointer;
+}
+
+/* Review Display */
+.doctor-reviews-section h4 {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.review-card {
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.review-patient-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.review-patient-name {
+  font-weight: 600;
+  margin: 0;
+}
+.star-display {
+  font-size: 1rem;
+}
+.review-comment {
+  font-style: italic;
+  color: var(--text-light);
+}
+.review-date {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  text-align: right;
+  margin-top: 1rem;
+}
+
+/* Action Buttons */
+.btn-complete {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-review {
+  background-color: #f59e0b; /* yellow */
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+/* Add this to the end of App.css */
+
+.btn-cancel {
+  background-color: #ef4444; /* red */
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
